@@ -43,7 +43,7 @@ SHT31D_ErrorCode ClosedCube_SHT31D::begin(uint8_t address) {
 
 SHT31D_ErrorCode ClosedCube_SHT31D::reset()
 {
-	return  softReset();
+	return softReset();
 }
 
 SHT31D ClosedCube_SHT31D::periodicFetchData()
@@ -51,8 +51,8 @@ SHT31D ClosedCube_SHT31D::periodicFetchData()
 	SHT31D_ErrorCode error = writeCommand(SHT3XD_CMD_FETCH_DATA);
 	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
-	else
-		returnError(error);
+
+	return returnError(error);
 }
 
 SHT31D_ErrorCode ClosedCube_SHT31D::periodicStop() {
@@ -168,7 +168,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidity(SHT31D_Repeatability repeatability
 SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability repeatability)
 {
 	SHT31D_ErrorCode error = SHT3XD_NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -200,7 +199,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability r
 SHT31D ClosedCube_SHT31D::readTempAndHumidityPolling(SHT31D_Repeatability repeatability, uint8_t timeout)
 {
 	SHT31D_ErrorCode error = SHT3XD_NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -220,12 +218,10 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidityPolling(SHT31D_Repeatability repeat
 
 	delay(50);
 
-	if (error == SHT3XD_NO_ERROR) {
+	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
-	} else {
-		return returnError(error);
-	}
 
+	return returnError(error);
 }
 
 SHT31D ClosedCube_SHT31D::readAlertHighSet() {
