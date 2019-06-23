@@ -43,7 +43,7 @@ SHT31D_ErrorCode ClosedCube_SHT31D::begin(uint8_t address) {
 
 SHT31D_ErrorCode ClosedCube_SHT31D::reset()
 {
-	return  softReset();
+	return softReset();
 }
 
 SHT31D ClosedCube_SHT31D::periodicFetchData()
@@ -51,8 +51,8 @@ SHT31D ClosedCube_SHT31D::periodicFetchData()
 	SHT31D_ErrorCode error = writeCommand(SHT3XD_CMD_FETCH_DATA);
 	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
-	else
-		returnError(error);
+
+	return returnError(error);
 }
 
 SHT31D_ErrorCode ClosedCube_SHT31D::periodicStop() {
@@ -168,7 +168,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidity(SHT31D_Repeatability repeatability
 SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability repeatability)
 {
 	SHT31D_ErrorCode error = SHT3XD_NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -200,7 +199,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability r
 SHT31D ClosedCube_SHT31D::readTempAndHumidityPolling(SHT31D_Repeatability repeatability, uint8_t timeout)
 {
 	SHT31D_ErrorCode error = SHT3XD_NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -220,12 +218,10 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidityPolling(SHT31D_Repeatability repeat
 
 	delay(50);
 
-	if (error == SHT3XD_NO_ERROR) {
+	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
-	} else {
-		return returnError(error);
-	}
 
+	return returnError(error);
 }
 
 SHT31D ClosedCube_SHT31D::readAlertHighSet() {
@@ -342,7 +338,9 @@ SHT31D_RegisterStatus ClosedCube_SHT31D::readStatusRegister()
 {
 	SHT31D_RegisterStatus result;
 
-	SHT31D_ErrorCode error = writeCommand(SHT3XD_CMD_READ_STATUS);
+	SHT31D_ErrorCode error;
+	error = writeCommand(SHT3XD_CMD_READ_STATUS);
+
 	if (error == SHT3XD_NO_ERROR)
 		error = read(&result.rawData, 1);
 
@@ -357,15 +355,13 @@ SHT31D_ErrorCode ClosedCube_SHT31D::clearAll() {
 SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 {
 	SHT31D result;
-
-	result.t = 0;
-	result.rh = 0;
-
-	SHT31D_ErrorCode error;
 	uint16_t buf[2];
 
-	if (error == SHT3XD_NO_ERROR)
-		error = read(buf, 2);
+	result.t = NAN;
+	result.rh = NAN;
+
+	SHT31D_ErrorCode error;
+	error = read(buf, 2);
 
 	if (error == SHT3XD_NO_ERROR) {
 		result.t = calculateTemperature(buf[0]);
@@ -379,14 +375,12 @@ SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 SHT31D ClosedCube_SHT31D::readAlertData(SHT31D_Commands command)
 {
 	SHT31D result;
-
-	result.t = 0;
-	result.rh = 0;
-
-	SHT31D_ErrorCode error;
-	
 	uint16_t buf;
 
+	result.t = NAN;
+	result.rh = NAN;
+
+	SHT31D_ErrorCode error;
 	error = writeCommand(command);
 
 	if (error == SHT3XD_NO_ERROR)
@@ -475,8 +469,8 @@ uint8_t ClosedCube_SHT31D::calculateCrc(uint8_t data[])
 
 SHT31D ClosedCube_SHT31D::returnError(SHT31D_ErrorCode error) {
 	SHT31D result;
-	result.t = 0;
-	result.rh = 0;
+	result.t = NAN;
+	result.rh = NAN;
 	result.error = error;
 	return result;
 }
