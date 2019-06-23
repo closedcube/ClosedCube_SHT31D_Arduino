@@ -361,10 +361,7 @@ SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 	result.rh = NAN;
 
 	SHT31D_ErrorCode error;
-	error = writeCommand(SHT3XD_CMD_READ_STATUS);
-	
-	if (error == SHT3XD_NO_ERROR)
-		error = read(buf, 2);
+	error = read(buf, 2);
 
 	if (error == SHT3XD_NO_ERROR) {
 		result.t = calculateTemperature(buf[0]);
