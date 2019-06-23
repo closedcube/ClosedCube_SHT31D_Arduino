@@ -338,7 +338,9 @@ SHT31D_RegisterStatus ClosedCube_SHT31D::readStatusRegister()
 {
 	SHT31D_RegisterStatus result;
 
-	SHT31D_ErrorCode error = writeCommand(SHT3XD_CMD_READ_STATUS);
+	SHT31D_ErrorCode error;
+	error = writeCommand(SHT3XD_CMD_READ_STATUS);
+
 	if (error == SHT3XD_NO_ERROR)
 		error = read(&result.rawData, 1);
 
@@ -353,13 +355,14 @@ SHT31D_ErrorCode ClosedCube_SHT31D::clearAll() {
 SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 {
 	SHT31D result;
-
-	result.t = 0;
-	result.rh = 0;
-
-	SHT31D_ErrorCode error;
 	uint16_t buf[2];
 
+	result.t = NAN;
+	result.rh = NAN;
+
+	SHT31D_ErrorCode error;
+	error = writeCommand(SHT3XD_CMD_READ_STATUS);
+	
 	if (error == SHT3XD_NO_ERROR)
 		error = read(buf, 2);
 
@@ -375,14 +378,12 @@ SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 SHT31D ClosedCube_SHT31D::readAlertData(SHT31D_Commands command)
 {
 	SHT31D result;
-
-	result.t = 0;
-	result.rh = 0;
-
-	SHT31D_ErrorCode error;
-	
 	uint16_t buf;
 
+	result.t = NAN;
+	result.rh = NAN;
+
+	SHT31D_ErrorCode error;
 	error = writeCommand(command);
 
 	if (error == SHT3XD_NO_ERROR)
@@ -471,8 +472,8 @@ uint8_t ClosedCube_SHT31D::calculateCrc(uint8_t data[])
 
 SHT31D ClosedCube_SHT31D::returnError(SHT31D_ErrorCode error) {
 	SHT31D result;
-	result.t = 0;
-	result.rh = 0;
+	result.t = NAN;
+	result.rh = NAN;
 	result.error = error;
 	return result;
 }
