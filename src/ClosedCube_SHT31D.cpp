@@ -52,7 +52,7 @@ SHT31D ClosedCube_SHT31D::periodicFetchData()
 	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
 	else
-		returnError(error);
+		return returnError(error);
 }
 
 SHT31D_ErrorCode ClosedCube_SHT31D::periodicStop() {
