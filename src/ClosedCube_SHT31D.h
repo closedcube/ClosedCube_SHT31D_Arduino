@@ -32,6 +32,7 @@ THE SOFTWARE.
 #define CLOSEDCUBE_SHT31D
 
 #include <Arduino.h>
+#include <Wire.h>
 
 typedef enum {
 	SHT3XD_CMD_READ_SERIAL_NUMBER = 0x3780,
@@ -208,4 +209,4 @@ private:
 };
 
 
-#endif 
+#endif

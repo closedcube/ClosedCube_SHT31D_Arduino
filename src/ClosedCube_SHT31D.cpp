@@ -27,7 +27,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-#include <Wire.h>
 
 #include "ClosedCube_SHT31D.h"
 
@@ -52,7 +51,7 @@ SHT31D ClosedCube_SHT31D::periodicFetchData()
 	if (error == SHT3XD_NO_ERROR)
 		return readTemperatureAndHumidity();
 	else
-		returnError(error);
+		return returnError(error);
 }
 
 SHT31D_ErrorCode ClosedCube_SHT31D::periodicStop() {
@@ -384,7 +383,7 @@ SHT31D ClosedCube_SHT31D::readAlertData(SHT31D_Commands command)
 	result.rh = 0;
 
 	SHT31D_ErrorCode error;
-	
+
 	uint16_t buf;
 
 	error = writeCommand(command);
